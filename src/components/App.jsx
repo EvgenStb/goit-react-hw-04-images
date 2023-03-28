@@ -13,10 +13,6 @@ import Loader from './Loader/Loader';
   const [totalImg, setTotalImg] = useState(0)
   const [Loading, setLoading] = useState(false)
 
-useEffect (() => {
-
-})
-
 useEffect(() => {
   if (!query) {
     return;
