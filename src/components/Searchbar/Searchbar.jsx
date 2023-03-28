@@ -1,29 +1,31 @@
-import React, { Component } from 'react';
+import {useState} from 'react';
 import { ImSearch } from 'react-icons/im';
 import './Searchbar.css';
 import Notiflix from 'notiflix';
 
-class SearchBar extends Component {
-  state = {
-    request: '',
-  };
-  handlerInput = e => {
-    this.setState({ request: e.currentTarget.value.toLowerCase() });
-  };
-  hendlerSubmit = e => {
-    e.preventDefault();
-    if (this.state.request.trim() === '') {
-      Notiflix.Notify.failure('Please enter your search term');
-      return;
-    }
-    this.props.onSubmit(this.state.request);
-    this.setState({ request: '' });
-  };
 
-  render() {
+export default function SearchBar ({onSubmitQuery}) {
+const [query, setQuery] = useState('')
+  
+const handlerInput = e => {
+    setQuery(e.target.value.toLowerCase())
+  }
+
+const handlerSubmit = e => {
+  e.preventDefault();
+  if (query.trim()===''){
+    Notiflix.Notify.failure('Please enter your search term');
+    return;
+  }
+  onSubmitQuery(query);
+  setQuery('');
+}
+
     return (
       <header className="Searchbar">
-        <form className="SearchForm" onSubmit={this.hendlerSubmit}>
+        <form className="SearchForm"
+         onSubmit={handlerSubmit}
+         >
           <button type="submit" className="SearchForm-button">
             <ImSearch style={{ marginRight: 8 }} />
             <span className="SearchForm-button-label">Search</span>
@@ -31,8 +33,8 @@ class SearchBar extends Component {
           <input
             className="SearchForm-input"
             type="text"
-            onChange={this.handlerInput}
-            value={this.state.request}
+            onChange={handlerInput}
+            value={query}
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
@@ -40,7 +42,4 @@ class SearchBar extends Component {
         </form>
       </header>
     );
-  }
 }
-
-export default SearchBar;

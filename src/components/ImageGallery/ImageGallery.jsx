@@ -3,7 +3,7 @@ import './ImageGallery.css';
 import { ImageGalleryItem } from './ImageGalleryItem';
 import PropTypes from 'prop-types';
 
-const ImageGallery = ({ images }) => {
+const ImageGallery = ({images}) => {
   return (
     <ul className="ImageGallery">
       {images &&

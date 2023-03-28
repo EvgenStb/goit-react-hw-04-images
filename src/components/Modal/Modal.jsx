@@ -1,35 +1,31 @@
-import React, { Component } from 'react';
+import {useEffect} from 'react';
 import './Modal.css';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 
 const modalRoot = document.querySelector('#modal-root');
 
-export default class Modal extends Component {
-  componentDidMount() {
-    window.addEventListener('keydown', this.closeByKey);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.closeByKey);
-  }
-
-  closeByKey = e => {
-    if (e.code !== 'Escape') {
-      return;
+export default function Modal ({img, tags, closeModal}) {
+  useEffect (() => {
+    const closeByKey = e => {
+      if (e.code !== 'Escape') {
+        return
+      }
+      closeModal()
+    };
+    window.addEventListener('keydown', closeByKey)
+    return () => {
+      window.removeEventListener('keydown', closeByKey)
     }
-    this.props.closeModal();
-  };
-  closeByClick = e => {
+  },[closeModal])
+
+ const closeByClick = e => {
     if (e.currentTarget === e.target) {
-      this.props.closeModal();
+      closeModal();
     }
   };
-
-  render() {
-    const { tags, img } = this.props;
-    return createPortal(
-      <div className="Overlay" onClick={this.closeByClick}>
+  return createPortal(
+      <div className="Overlay" onClick={closeByClick}>
         <div className="Modal">
           <img src={img} alt={tags} />
         </div>
@@ -37,7 +33,7 @@ export default class Modal extends Component {
       modalRoot
     );
   }
-}
+
 
 Modal.propTypes = {
   img: PropTypes.string.isRequired,
